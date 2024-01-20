@@ -27,7 +27,7 @@ export default{
       type: "get",
       success:resp => {
         bot_name.value = resp.name;
-        bot_name.bot_rating.value = resp.rating;
+        bot_rating.value = resp.rating;
 
       }
     });
@@ -42,6 +42,9 @@ export default{
 
 <style> 
 /* css */
-
+body{
+  background-image: url("@/assets/background.png");
+  background-size: cover;
+}
 </style>
 
