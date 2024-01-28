@@ -10,11 +10,11 @@ import java.util.*;
 public class BotInfoController {
     //前后端分离返回数据
     @RequestMapping("getbotinfo/")
-    public Map<String,String> getBotInfo() {
+    public Map<String, String> getBotInfo() {
 
-        Map<String ,String >bot1 = new HashMap<>();
-        bot1.put("name","Li");
-        bot1.put("rating","120");
+        Map<String, String> bot1 = new HashMap<>();
+        bot1.put("name", "Li");
+        bot1.put("rating", "120");
 
         return bot1;
 

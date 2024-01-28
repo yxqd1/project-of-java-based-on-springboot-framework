@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/pk/")
 public class IndexController {
     @RequestMapping("index/")
-    public  String index(){
+    public String index() {
         //前后端不分离，返回文件
         return "pk/index.html";
     }
