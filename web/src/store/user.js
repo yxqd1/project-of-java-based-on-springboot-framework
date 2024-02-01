@@ -7,12 +7,13 @@ export default {
         photo: "",
         token: "",
         is_login: false,
+        pulling_info: true, // 是否正在从云端拉取信息
 
     },
     getters: {
     },
     mutations: {
-        // 更新state
+        // 更新state ，外部调用修改时用commit
         updateUser(state, user) {
             state.id = user.id;
             state.username = user.username;
@@ -31,6 +32,10 @@ export default {
             state.photo = "";
             state.token = "";
             state.is_login = false;
+        },
+        //
+        updatePullingInfo(state, pulling_info) {
+            state.pulling_info = pulling_info;
         }
     },
     actions: {
@@ -45,6 +50,9 @@ export default {
                 },
                 success(resp) {
                     if (resp.error_message === "success") {
+                        // 将token存到存储器中
+                        localStorage.setItem("jwt_token", resp.token);
+
                         context.commit("updateToken", resp.token);
                         data.success(resp);
                     } else {
@@ -66,6 +74,7 @@ export default {
                 },
                 success(resp) {
                     if (resp.error_message === 'success') {
+
                         context.commit("updateUser", {
                             ...resp,
                             is_login: true,
@@ -85,7 +94,9 @@ export default {
                 }
             });
         },
-        logout(context){
+        logout(context) {
+            localStorage.removeItem("jwt_token");
+
             context.commit("logout");
         }
     },
