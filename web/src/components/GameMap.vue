@@ -9,13 +9,16 @@
 <script>
 import {GameMap} from "@/assets/scripts/GameMap";
 import { ref , onMounted } from "vue";
+import { useStore } from "vuex";
 export default{
     setup(){
+        const store = useStore();
         let parent = ref(null);
         let canvas = ref(null);
         onMounted(()=>{
             // 取值要用value
-            new GameMap(canvas.value.getContext('2d'),parent.value)
+            // vue调用js代码进行组建web页面
+            new GameMap(canvas.value.getContext('2d'),parent.value,store)
 
         });
         return {

@@ -2,10 +2,12 @@ import { AcGameObject } from "./AcGameObject";
 import { Wall } from "./Wall";
 import { Snake } from "./Snake";
 export class GameMap extends AcGameObject {
-    constructor(ctx, parent) {
+    constructor(ctx, parent, store) {
         super();
         this.ctx = ctx;
         this.parent = parent;
+        // 绑定状态
+        this.store = store;
         this.L = 0;
 
         // 尽量防止平白无故相撞
@@ -22,53 +24,54 @@ export class GameMap extends AcGameObject {
             new Snake({ id: 1, color: "#F94848", r: 1, c: this.cols - 2 }, this),
         ];
     }
-    // 判断连通性
-    check_connectivity(g, sx, sy, tx, ty) {
-        if (sx == tx && sy == ty) return true;
-        g[sx][sy] = true;
-        let dx = [-1, 0, 1, 0], dy = [0, 1, 0, -1];
-        for (let i = 0; i < 4; i++) {
-            let x = sx + dx[i], y = sy + dy[i];
-            if (!g[x][y] && this.check_connectivity(g, x, y, tx, ty))
-                return true;
+    // // 判断连通性
+    // check_connectivity(g, sx, sy, tx, ty) {
+    //     if (sx == tx && sy == ty) return true;
+    //     g[sx][sy] = true;
+    //     let dx = [-1, 0, 1, 0], dy = [0, 1, 0, -1];
+    //     for (let i = 0; i < 4; i++) {
+    //         let x = sx + dx[i], y = sy + dy[i];
+    //         if (!g[x][y] && this.check_connectivity(g, x, y, tx, ty))
+    //             return true;
 
-        }
-        return false;
+    //     }
+    //     return false;
 
-    }
+    // }
     create_walls() {
-        const g = [];
-        for (let r = 0; r < this.rows; r++) {
-            g[r] = [];
-            for (let c = 0; c < this.cols; c++) {
-                g[r][c] = false;
-            }
-        }
-        //给四周加上障碍物
-        // 竖着的
-        for (let r = 0; r < this.rows; r++) {
-            g[r][0] = g[r][this.cols - 1] = true;
-        }
-        // 横着的
-        for (let c = 0; c < this.cols; c++) {
-            g[0][c] = g[this.rows - 1][c] = true;
+        const g = this.store.state.pk.gamemap;
 
-        }
-        // 创造随机障碍物
+        // const g = [];
+        // for (let r = 0; r < this.rows; r++) {
+        //     g[r] = [];
+        //     for (let c = 0; c < this.cols; c++) {
+        //         g[r][c] = false;
+        //     }
+        // }
+        // //给四周加上障碍物
+        // // 竖着的
+        // for (let r = 0; r < this.rows; r++) {
+        //     g[r][0] = g[r][this.cols - 1] = true;
+        // }
+        // // 横着的
+        // for (let c = 0; c < this.cols; c++) {
+        //     g[0][c] = g[this.rows - 1][c] = true;
+        // }
+        // // 创造随机障碍物
 
-        for (let i = 0; i < this.inner_walls_count; i++) {
-            for (let j = 0; j < 1000; j++) {
-                let r = parseInt(Math.random() * this.rows);
-                let c = parseInt(Math.random() * this.cols);
-                if (g[r][c] || g[this.rows - 1 - r][this.cols - 1 - c]) continue;
-                if (r == 1 && c == this.cols - 2 || (this.rows - 1 - r == this.rows - 2 && this.cols - 1 - c == 1)) continue;
-                g[r][c] = g[this.rows - 1 - r][this.cols - 1 - c] = true;
-                break;
-            }
-        }
-        // 检查是否可联通
-        const copy_g = JSON.parse(JSON.stringify(g));
-        if (!this.check_connectivity(copy_g, this.rows - 2, 1, 1, this.cols - 2)) return false;
+        // for (let i = 0; i < this.inner_walls_count; i++) {
+        //     for (let j = 0; j < 1000; j++) {
+        //         let r = parseInt(Math.random() * this.rows);
+        //         let c = parseInt(Math.random() * this.cols);
+        //         if (g[r][c] || g[this.rows - 1 - r][this.cols - 1 - c]) continue;
+        //         if (r == 1 && c == this.cols - 2 || (this.rows - 1 - r == this.rows - 2 && this.cols - 1 - c == 1)) continue;
+        //         g[r][c] = g[this.rows - 1 - r][this.cols - 1 - c] = true;
+        //         break;
+        //     }
+        // }
+        // // 检查是否可联通
+        // const copy_g = JSON.parse(JSON.stringify(g));
+        // if (!this.check_connectivity(copy_g, this.rows - 2, 1, 1, this.cols - 2)) return false;
         for (let r = 0; r < this.rows; r++) {
             for (let c = 0; c < this.cols; c++) {
                 if (g[r][c]) {
@@ -76,7 +79,7 @@ export class GameMap extends AcGameObject {
                 }
             }
         }
-        return true;
+        // return true;
     }
     // 设置监听，完成对方向的控制
     add_listening_events() {
@@ -97,9 +100,10 @@ export class GameMap extends AcGameObject {
     }
     //注意新增函数的用处
     start() {
-        for (let i = 0; i < 1000; i++) {
-            if (this.create_walls()) break;
-        }
+        this.create_walls();
+        // for (let i = 0; i < 1000; i++) {
+        //     if (this.create_walls()) break;
+        // }
         this.add_listening_events();
 
     }
@@ -150,7 +154,7 @@ export class GameMap extends AcGameObject {
     // 更新所需，包括 render
     update() {
         this.update_size();
-        if(this.check_ready()){
+        if (this.check_ready()) {
             this.next_step();
         }
         this.render();
