@@ -84,18 +84,24 @@ export class GameMap extends AcGameObject {
     // 设置监听，完成对方向的控制
     add_listening_events() {
         this.ctx.canvas.focus();
-
-        const [snake0, snake1] = this.snakes;
         // 通过相应API设置不同蛇
         this.ctx.canvas.addEventListener("keydown", e => {
-            if (e.key === 'w') snake0.set_direction(0);
-            else if (e.key === 'd') snake0.set_direction(1);
-            else if (e.key === 's') snake0.set_direction(2);
-            else if (e.key === 'a') snake0.set_direction(3);
-            else if (e.key === 'ArrowUp') snake1.set_direction(0);
-            else if (e.key === 'ArrowRight') snake1.set_direction(1);
-            else if (e.key === 'ArrowDown') snake1.set_direction(2);
-            else if (e.key === 'ArrowLeft') snake1.set_direction(3);
+            let d = -1;
+            if (e.key === 'w') d = 0;
+            else if (e.key === 'd') d = 1;
+            else if (e.key === 's') d = 2;
+            else if (e.key === 'a') d = 3;
+            if (d >= 0) {
+                this.store.state.pk.socket.send(JSON.stringify({
+                    event: "move",
+                    direction: d,
+                }));
+
+            }
+            // else if (e.key === 'ArrowUp') snake1.set_direction(0);
+            // else if (e.key === 'ArrowRight') snake1.set_direction(1);
+            // else if (e.key === 'ArrowDown') snake1.set_direction(2);
+            // else if (e.key === 'ArrowLeft') snake1.set_direction(3);
         });
     }
     //注意新增函数的用处

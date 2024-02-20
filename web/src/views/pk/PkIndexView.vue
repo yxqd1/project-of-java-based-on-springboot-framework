@@ -4,11 +4,13 @@
     <PlayGround v-if="$store.state.pk.status === 'playing'" />
     <!-- 那个对应的上用哪个 -->
     <MatchGround v-if="$store.state.pk.status === 'matching'" />
+    <ResultBoard v-if="$store.state.pk.loser != 'none'" />
 </template>
 
 <script>
 import PlayGround from '../../components/PlayGround.vue'
 import MatchGround from '../../components/MatchGround.vue'
+import ResultBoard from '@/components/ResultBoard.vue'
 // 导入  当组件被加载时的函数   当组件被卸载时的函数
 import { onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
@@ -17,6 +19,7 @@ export default {
     components: {
         PlayGround,
         MatchGround,
+        ResultBoard,
     },
     setup() {
         // 引入全局变量
@@ -45,7 +48,7 @@ export default {
                 const data = JSON.parse(msg.data);
                 // console.log(data);
                 // 匹配成功的话，photo进行变化
-                if (data.event === "start-matching") {
+                if (data.event === "start-matching") { // 匹配成功
                     store.commit("updateOpponent", {
                         username: data.opponent_username,
                         photo: data.opponent_photo,
@@ -53,9 +56,27 @@ export default {
                     // 时间延迟展示信息
                     setTimeout(() => {
                         store.commit("updateStatus", "playing");
-                    }, 2000);
-                    store.commit("updateGamemap", data.gamemap);
+                    }, 200);
+                    store.commit("updateGamemap", data.game);
+                } else if (data.event === "move") {
+                    console.log(data);
+                    const game = store.state.pk.gameObject;
+                    const [snake0, snake1] = game.snakes;
+                    snake0.set_direction(data.a_direction);
+                    snake1.set_direction(data.b_direction);
 
+                } else if (data.event === "result") {
+                    console.log(data);
+                    // 去世状态信息的处理
+                    const game = store.state.pk.gameObject;
+                    const [snake0, snake1] = game.snakes;
+                    if (data.loser === "all" || data.loser === "A") {
+                        snake0.status = "die";
+                    }
+                    if (data.loser === "all" || data.loser === "B") {
+                        snake1.status = "die";
+                    }
+                    store.commit("updateLoser", data.loser);
                 }
             }
             // 关闭
