@@ -26,6 +26,8 @@ export default {
         const store = useStore();
         const socketUrl = `ws://127.0.0.1:3000/websocket/${store.state.user.token}/`;
 
+        store.commit("updateLoser","none"); // 每次进入的时候都是初始界面
+
         let socket = null;
 
         // 连接挂起

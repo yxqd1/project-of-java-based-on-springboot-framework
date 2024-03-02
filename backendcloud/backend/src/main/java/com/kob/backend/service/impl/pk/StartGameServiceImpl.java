@@ -9,9 +9,9 @@ public class StartGameServiceImpl implements StartGameService {
 
     // 对于接口的实现类
     @Override
-    public String startGame(Integer aId, Integer bId) {
-        System.out.println("start game: "+aId +" "+bId);
-        WebSocketServer.startGame(aId,bId);
+    public String startGame(Integer aId, Integer aBotId, Integer bId, Integer bBotId) {
+        System.out.println("start game: " + aId + " " + bId);
+        WebSocketServer.startGame(aId, aBotId, bId, bBotId);
         return "start game success!";
     }
 }
