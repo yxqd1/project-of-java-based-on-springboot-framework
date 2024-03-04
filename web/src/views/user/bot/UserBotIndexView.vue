@@ -44,8 +44,8 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label for="add-bot-code" class="col-form-label">代码</label>
-                                                <VAceEditor v-model:value="botadd.content" @init="editorInit" lang="c_cpp"
-                                                    theme="textmate" style="height: 300px" />
+                                                <VAceEditor v-model:value="botadd.content" @init="editorInit"
+                                                    lang="c_cpp" theme="textmate" style="height: 300px" />
                                             </div>
                                         </form>
                                     </div>
@@ -54,7 +54,8 @@
                                         <div class="error-message">{{ botadd.error_message }}</div>
                                         <!-- @click="" 点击按钮时，触发js的事件 -->
                                         <button type="button" class="btn btn-primary" @click="add_bot">创建</button>
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">取消</button>
 
                                     </div>
                                 </div>
@@ -94,13 +95,14 @@
                                         </button>
                                         <!-- 删除的Modal -->
                                         <!-- Modal -->
-                                        <div class="modal fade" :id="'remove-bot-modal-' + bot.id" data-bs-backdrop="static"
-                                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                            aria-hidden="true">
+                                        <div class="modal fade" :id="'remove-bot-modal-' + bot.id"
+                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                            aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title
+                                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal
+                                                            title
                                                         </h1>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
@@ -134,8 +136,8 @@
                                                             <div class="mb-3">
                                                                 <label for="update-bot-title" class="col-form-label"
                                                                     style="text-align: left;">名称</label>
-                                                                <input v-model="bot.title" type="text" class="form-control"
-                                                                    id="update-bot-title">
+                                                                <input v-model="bot.title" type="text"
+                                                                    class="form-control" id="update-bot-title">
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="update-bot-description"
@@ -147,8 +149,9 @@
                                                             <div class="mb-3">
                                                                 <label for="update-bot-code"
                                                                     class="col-form-label">代码</label>
-                                                                <VAceEditor v-model:value="bot.content" @init="editorInit"
-                                                                    lang="c_cpp" theme="textmate" style="height: 300px" />
+                                                                <VAceEditor v-model:value="bot.content"
+                                                                    @init="editorInit" lang="c_cpp" theme="textmate"
+                                                                    style="height: 300px" />
                                                             </div>
                                                         </form>
                                                     </div>
